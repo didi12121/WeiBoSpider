@@ -1,0 +1,337 @@
+/**
+	 * 获取最大的评论页数，一页十条
+	 * */
+	private int getmaxPagenumber() {
+		String url = "https://weibo.cn/comment/hot/" + itemId + "?uid=" + uid + "&rl=0&gid=10001#cmtfrm";
+		Document doc = null;
+		int num = 0;
+		try {
+			doc = Jsoup.connect(url).header("Accept", "*/*").header("Accept-Encoding", "gzip, deflate")
+					.header("Accept-Language", "zh-CN,zh;q=0.8,en-US;q=0.5,en;q=0.3")
+					.header("Content-Type", "application/json;charset=UTF-8")
+					.header("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:48.0) Gecko/20100101 Firefox/48.0")
+					.header("Cookie", Cookie).ignoreContentType(true).data().timeout(10000).get();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		// method="post"
+		Elements txt = doc.select("form[method=post]");
+		for (Element element : txt) {
+			String text = element.text().toString();
+			if (text.endsWith("页")) {
+				text = text.substring(text.indexOf("/") + 1, text.indexOf("页", 3));
+				num = Integer.parseInt(text);
+			}
+		}
+		return num;
+	}
+	/**
+	 * 获取评论的文本
+	 * */
+	private void getctt(int i) {
+
+		Document doc;
+		try {
+			String url;
+			// 判断翻页
+			if (i > 1) {
+				url = "https://weibo.cn/comment/hot/" + itemId + "?uid=" + uid + "&rl=0&gid=10001&page=" + i;
+			} else {
+				url = "https://weibo.cn/comment/" + itemId + "?uid=" + uid + "&rl=0&gid=10001#cmtfrm";
+			}
+			doc = Jsoup.connect(url).header("Accept", "*/*").header("Accept-Encoding", "gzip, deflate")
+					.header("Accept-Language", "zh-CN,zh;q=0.8,en-US;q=0.5,en;q=0.3")
+					.header("Content-Type", "application/json;charset=UTF-8")
+					.header("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:48.0) Gecko/20100101 Firefox/48.0")
+					.header("Cookie", Cookie).ignoreContentType(true).data().timeout(10000).get();
+			Elements contents = doc.select("span[class=ctt]");
+			for (Element element : contents) {
+				String ctt = element.text().toString();
+				System.out.println(ctt);
+			}
+		} catch (IOException e) {
+			System.out.println("丢了个错误----------");
+			e.printStackTrace();
+		}
+
+	}
+	
+	
+	
+<!--?xml version="1.0" encoding="UTF-8"?--><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Cache-Control" content="no-cache">
+  <meta id="viewport" name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0, maximum-scale=2.0">
+  <link rel="icon" sizes="any" mask href="https://h5.sinaimg.cn/upload/2015/05/15/28/WeiboLogoCh.svg" color="black">
+  <meta name="MobileOptimized" content="240">
+  <title>吃不饱的八万二饼的微博</title>
+  <style type="text/css" id="internalStyle">html,body,p,form,div,table,textarea,input,span,select{font-size:12px;word-wrap:break-word;}body{background:#F8F9F9;color:#000;padding:1px;margin:1px;}table,tr,td{border-width:0px;margin:0px;padding:0px;}form{margin:0px;padding:0px;border:0px;}textarea{border:1px solid #96c1e6}textarea{width:95%;}a,.tl{color:#2a5492;text-decoration:underline;}/*a:link {color:#023298}*/.k{color:#2a5492;text-decoration:underline;}.kt{color:#F00;}.ib{border:1px solid #C1C1C1;}.pm,.pmy{clear:both;background:#ffffff;color:#676566;border:1px solid #b1cee7;padding:3px;margin:2px 1px;overflow:hidden;}.pms{clear:both;background:#c8d9f3;color:#666666;padding:3px;margin:0 1px;overflow:hidden;}.pmst{margin-top: 5px;}.pmsl{clear:both;padding:3px;margin:0 1px;overflow:hidden;}.pmy{background:#DADADA;border:1px solid #F8F8F8;}.t{padding:0px;margin:0px;height:35px;}.b{background:#e3efff;text-align:center;color:#2a5492;clear:both;padding:4px;}.bl{color:#2a5492;}.n{clear:both;background:#436193;color:#FFF;padding:4px; margin: 1px;}.nt{color:#b9e7ff;}.nl{color:#FFF;text-decoration:none;}.nfw{clear:both;border:1px solid #BACDEB;padding:3px;margin:2px 1px;}.s{border-bottom:1px dotted #666666;margin:3px;clear:both;}.tip{clear:both; background:#c8d9f3;color:#676566;border:1px solid #BACDEB;padding:3px;margin:2px 1px;}.tip2{color:#000000;padding:2px 3px;clear:both;}.ps{clear:both;background:#FFF;color:#676566;border:1px solid #BACDEB;padding:3px;margin:2px 1px;}.tm{background:#feffe5;border:1px solid #e6de8d;padding:4px;}.tm a{color:#ba8300;}.tmn{color:#f00}.tk{color:#ffffff}.tc{color:#63676A;}.c{padding:2px 5px;}.c div a img{border:1px solid #C1C1C1;}.ct{color:#9d9d9d;font-style:italic;}.cmt{color:#9d9d9d;}.ctt{color:#000;}.cc{color:#2a5492;}.nk{color:#2a5492;}.por {border: 1px solid #CCCCCC;height:50px;width:50px;}.me{color:#000000;background:#FEDFDF;padding:2px 5px;}.pa{padding:2px 4px;}.nm{margin:10px 5px;padding:2px;}.hm{padding:5px;background:#FFF;color:#63676A;}.u{margin:2px 1px;background:#ffffff;border:1px solid #b1cee7;}.ut{padding:2px 3px;}.cd{text-align:center;}.r{color:#F00;}.g{color:#0F0;}.bn{background: transparent;border: 0 none;text-align: left;padding-left: 0;}</style>
+  <script>if(top != self){top.location = self.location;}</script>
+ </head>
+ <body>
+  <div class="n" style="padding: 6px 4px;">
+   <a href="https://weibo.cn/?tf=5_009" class="nl">首页<span class="tk">!</span></a>|
+   <a href="https://weibo.cn/msg/?tf=5_010" class="nl">消息</a>|
+   <a href="https://huati.weibo.cn" class="nl">话题</a>|
+   <a href="https://weibo.cn/search/?tf=5_012" class="nl">搜索</a>|
+   <a href="/u/6837288378?filter=0&amp;page=1&amp;rand=4591&amp;p=r" class="nl">刷新</a>
+  </div>
+  <div class="c tip">
+   <a href="https://m.weibo.cn" id="top" class="tl">手机微博触屏版,点击前往&gt;&gt;</a>
+  </div>
+  <div class="u">
+   <table>
+    <tbody>
+     <tr>
+      <td valign="top"><a href="/6837288378/avatar?rl=0"><img src="https://tvax3.sinaimg.cn/crop.0.248.1080.1080.50/007sIz2Oly8g04rcqg0bsj30u01401kx.jpg?KID=imgbed,tva&amp;Expires=1570891528&amp;ssig=314KTJlJ6a" alt="头像" class="por"></a></td>
+      <td valign="top">
+       <div class="ut">
+        <span class="ctt">吃不饱的八万二饼<img src="https://h5.sinaimg.cn/upload/2016/05/26/319/5338.gif" alt="V"><a href="http://vip.weibo.cn/?F=W_tq_zsbs_01"><img src="https://h5.sinaimg.cn/upload/2016/05/26/319/donate_btn_s.png" alt="M"></a>&nbsp;女/天津 &nbsp; <span class="cmt">已关注</span></span>
+        <br>
+        <span class="ctt">认证：微博vlog博主 美食视频自媒体</span>
+        <br>
+        <span class="ctt" style="word-break:break-all; width:50px;">b 站/抖音/头条号同名，噗呲！！</span>
+        <br>
+        <a href="/im/chat?uid=6837288378&amp;rl=0">私信</a>&nbsp;
+        <a href="/6837288378/info">资料</a>&nbsp;
+        <a href="/6837288378/operation?rl=0">操作</a>&nbsp;
+        <a href="/attgroup/special?fuid=6837288378&amp;st=6dca7b">特别关注</a>&nbsp;
+        <a href="http://new.vip.weibo.cn/vippay/payother?present=1&amp;action=comfirmTime&amp;uid=6837288378">送Ta会员</a>
+       </div></td>
+     </tr>
+    </tbody>
+   </table>
+   <div class="tip2">
+    <span class="tc">微博[190]</span>&nbsp;
+    <a href="/6837288378/follow">关注[69]</a>&nbsp;
+    <a href="/6837288378/fans">粉丝[23975]</a>&nbsp;
+    <a href="/attgroup/opening?uid=6837288378">分组[1]</a>&nbsp;
+    <a href="/at/weibo?uid=6837288378">@她的</a>
+   </div>
+  </div>
+  <div class="pmst">
+   <span class="pms">&nbsp;微博&nbsp;</span>
+   <span class="pmsl">&nbsp;<a href="/6837288378/photo?tf=6_008">相册</a>&nbsp;</span>
+  </div>
+  <div class="pms">
+   全部-
+   <a href="/u/6837288378?filter=1">原创</a>-
+   <a href="/u/6837288378?filter=2">图片</a>-
+   <a href="/attgroup/opening?uid=6837288378">分组</a>-
+   <a href="/6837288378/search?f=u&amp;rl=0">筛选</a>
+  </div>
+  <div class="c" id="M_Ib8wiorha">
+   <div>
+    <span class="ctt">正经美食up的衬衫穿搭！！<a href="https://weibo.cn/pages/100808topic?extparam=%E7%A9%BF%E6%90%AD&amp;from=feed">#穿搭#</a> <a href="https://m.weibo.cn/s/video/show?object_id=1034:4426066391929377&amp;fromWap=1">吃不饱的八万二饼的微博视频</a> </span>&nbsp;
+    <br>
+    <a href="https://weibo.cn/attitude/Ib8wiorha/add?uid=2574279745&amp;rl=0&amp;st=6dca7b">赞[444]</a>&nbsp;
+    <a href="https://weibo.cn/repost/Ib8wiorha?uid=6837288378&amp;rl=0">转发[26]</a>&nbsp;
+    <a href="https://weibo.cn/comment/Ib8wiorha?uid=6837288378&amp;rl=0#cmtfrm" class="cc">评论[100]</a>&nbsp;
+    <a href="https://weibo.cn/fav/addFav/Ib8wiorha?rl=0&amp;st=6dca7b">收藏</a>
+    <!---->&nbsp;
+    <span class="ct">今天 12:15&nbsp;来自微博 weibo.com</span>
+   </div>
+  </div>
+  <div class="s"></div>
+  <div class="c" id="M_Ib3a8jMBE">
+   <div>
+    <span class="ctt">有事来上海，更一波正经做作摆拍照，和24小时站在金字塔顶端的人中dragon凤，我一度怀疑自己上辈子是个摄影师<img alt="[喵喵]" src="//h5.sinaimg.cn/m/emoticon/icon/others/d_miao-61fe2a7aaa.png" style="width:1em; height:1em;"></span>
+    <img alt="[喵喵]" src="//h5.sinaimg.cn/m/emoticon/icon/others/d_miao-61fe2a7aaa.png" style="width:1em; height:1em;"> &nbsp;[
+    <a href="https://weibo.cn/mblog/picAll/Ib3a8jMBE?rl=1">组图共9张</a>]
+   </div>
+   <div>
+    <a href="https://weibo.cn/mblog/pic/Ib3a8jMBE?rl=0"><img src="http://wx2.sinaimg.cn/wap180/007sIz2Ogy1g7umtjl4v2j31c60u00ya.jpg" alt="图片" class="ib"></a>&nbsp;
+    <a href="https://weibo.cn/mblog/oripic?id=Ib3a8jMBE&amp;u=007sIz2Ogy1g7umtjl4v2j31c60u00ya">原图</a>&nbsp;
+    <br>
+    <span class="cmt">已赞[833]</span>&nbsp;
+    <a href="https://weibo.cn/repost/Ib3a8jMBE?uid=6837288378&amp;rl=0">转发[3]</a>&nbsp;
+    <a href="https://weibo.cn/comment/Ib3a8jMBE?uid=6837288378&amp;rl=0#cmtfrm" class="cc">评论[138]</a>&nbsp;
+    <a href="https://weibo.cn/fav/addFav/Ib3a8jMBE?rl=0&amp;st=6dca7b">收藏</a>
+    <!---->&nbsp;
+    <span class="ct">10月11日 22:36&nbsp;来自全屏双摄 OPPO A5</span>
+   </div>
+  </div>
+  <div class="s"></div>
+  <div class="c" id="M_IaQacn1VO">
+   <div>
+    <span class="ctt">做大哥同款土豪戒指，戴上它让你24小时站在金字塔顶端！！<a href="https://weibo.cn/pages/100808topic?extparam=%E6%90%9E%E7%AC%91&amp;from=feed">#搞笑#</a> <a href="https://weibo.cn/pages/100808topic?extparam=%E6%81%B6%E6%90%9E&amp;from=feed">#恶搞#</a> <a href="https://weibo.cn/pages/100808topic?extparam=%E6%89%8B%E5%B7%A5diy&amp;from=feed">#手工diy#</a> <a href="https://m.weibo.cn/s/video/show?object_id=1034:4425832450487255&amp;fromWap=1">吃不饱的八万二饼的微博视频</a> </span>&nbsp;
+    <br>
+    <a href="https://weibo.cn/attitude/IaQacn1VO/add?uid=2574279745&amp;rl=0&amp;st=6dca7b">赞[571]</a>&nbsp;
+    <a href="https://weibo.cn/repost/IaQacn1VO?uid=6837288378&amp;rl=0">转发[13]</a>&nbsp;
+    <a href="https://weibo.cn/comment/IaQacn1VO?uid=6837288378&amp;rl=0#cmtfrm" class="cc">评论[91]</a>&nbsp;
+    <a href="https://weibo.cn/fav/addFav/IaQacn1VO?rl=0&amp;st=6dca7b">收藏</a>
+    <!---->&nbsp;
+    <span class="ct">10月10日 13:31&nbsp;来自搜狗高速浏览器</span>
+   </div>
+  </div>
+  <div class="s"></div>
+  <div class="c" id="M_IapvJ5ucy">
+   <div>
+    <span class="ctt">花250买压薯条机做超长薯条，称霸夜市和早市？！<a href="https://weibo.cn/pages/100808topic?extparam=%E6%90%9E%E7%AC%91%E8%A7%86%E9%A2%91&amp;from=feed">#搞笑视频#</a> <a href="https://weibo.cn/pages/100808topic?extparam=%E6%81%B6%E6%90%9E&amp;from=feed">#恶搞#</a> <a href="https://weibo.cn/pages/100808topic?extparam=%E8%87%AA%E5%88%B6%E8%96%AF%E6%9D%A1&amp;from=feed">#自制薯条#</a> <a href="https://m.weibo.cn/s/video/show?object_id=1034:4424790128153513&amp;fromWap=1">吃不饱的八万二饼的微博视频</a> </span>&nbsp;
+    <br>
+    <a href="https://weibo.cn/attitude/IapvJ5ucy/add?uid=2574279745&amp;rl=0&amp;st=6dca7b">赞[589]</a>&nbsp;
+    <a href="https://weibo.cn/repost/IapvJ5ucy?uid=6837288378&amp;rl=0">转发[26]</a>&nbsp;
+    <a href="https://weibo.cn/comment/IapvJ5ucy?uid=6837288378&amp;rl=0#cmtfrm" class="cc">评论[116]</a>&nbsp;
+    <a href="https://weibo.cn/fav/addFav/IapvJ5ucy?rl=0&amp;st=6dca7b">收藏</a>
+    <!---->&nbsp;
+    <span class="ct">10月07日 17:40&nbsp;来自微博 weibo.com</span>
+   </div>
+  </div>
+  <div class="s"></div>
+  <div class="c" id="M_Ia8ULtQKJ">
+   <div>
+    <span class="ctt">最后一次“粉丝礼物”大开箱，承蒙喜欢，感谢关注！！<a href="https://weibo.cn/pages/100808topic?extparam=%E7%B2%89%E4%B8%9D%E7%A4%BC%E7%89%A9%E5%BC%80%E7%AE%B1&amp;from=feed">#粉丝礼物开箱#</a> <a href="https://weibo.cn/pages/100808topic?extparam=%E6%90%9E%E7%AC%91%E8%A7%86%E9%A2%91&amp;from=feed">#搞笑视频#</a> <a href="https://m.weibo.cn/s/video/show?object_id=1034:4424108839245820&amp;fromWap=1">吃不饱的八万二饼的微博视频</a> </span>&nbsp;
+    <br>
+    <a href="https://weibo.cn/attitude/Ia8ULtQKJ/add?uid=2574279745&amp;rl=0&amp;st=6dca7b">赞[749]</a>&nbsp;
+    <a href="https://weibo.cn/repost/Ia8ULtQKJ?uid=6837288378&amp;rl=0">转发[24]</a>&nbsp;
+    <a href="https://weibo.cn/comment/Ia8ULtQKJ?uid=6837288378&amp;rl=0#cmtfrm" class="cc">评论[120]</a>&nbsp;
+    <a href="https://weibo.cn/fav/addFav/Ia8ULtQKJ?rl=0&amp;st=6dca7b">收藏</a>
+    <!---->&nbsp;
+    <span class="ct">10月05日 23:25&nbsp;来自搜狗高速浏览器</span>
+   </div>
+  </div>
+  <div class="s"></div>
+  <div class="c" id="M_I9VypaxZF">
+   <div>
+    <span class="ctt">听说好多人中dragon凤想要二师傅穿搭，那我们最近研究研究，出一个穿搭视频？？<img alt="[喵喵]" src="//h5.sinaimg.cn/m/emoticon/icon/others/d_miao-61fe2a7aaa.png" style="width:1em; height:1em;"></span>
+    <img alt="[喵喵]" src="//h5.sinaimg.cn/m/emoticon/icon/others/d_miao-61fe2a7aaa.png" style="width:1em; height:1em;"> &nbsp;[
+    <a href="https://weibo.cn/mblog/picAll/I9VypaxZF?rl=1">组图共3张</a>]
+   </div>
+   <div>
+    <a href="https://weibo.cn/mblog/pic/I9VypaxZF?rl=0"><img src="http://wx4.sinaimg.cn/wap180/007sIz2Ogy1g7m3mrld0bj309q09vq37.jpg" alt="图片" class="ib"></a>&nbsp;
+    <a href="https://weibo.cn/mblog/oripic?id=I9VypaxZF&amp;u=007sIz2Ogy1g7m3mrld0bj309q09vq37">原图</a>&nbsp;
+    <br>
+    <a href="https://weibo.cn/attitude/I9VypaxZF/add?uid=2574279745&amp;rl=0&amp;st=6dca7b">赞[1014]</a>&nbsp;
+    <a href="https://weibo.cn/repost/I9VypaxZF?uid=6837288378&amp;rl=0">转发[2]</a>&nbsp;
+    <a href="https://weibo.cn/comment/I9VypaxZF?uid=6837288378&amp;rl=0#cmtfrm" class="cc">评论[159]</a>&nbsp;
+    <a href="https://weibo.cn/fav/addFav/I9VypaxZF?rl=0&amp;st=6dca7b">收藏</a>
+    <!---->&nbsp;
+    <span class="ct">10月04日 13:24&nbsp;来自全屏双摄 OPPO A5</span>
+   </div>
+  </div>
+  <div class="s"></div>
+  <div class="c" id="M_I9NJGsCF4">
+   <div>
+    <span class="ctt">【二八vlog】当你的朋友给你染了个紫色头发，并给你表演一段悠悠球...<a href="https://weibo.cn/pages/100808topic?extparam=%E6%97%A5%E5%B8%B8vlog&amp;from=feed">#日常vlog#</a> <a href="https://weibo.cn/pages/100808topic?extparam=%E6%88%91%E7%9A%84vlog%E7%94%9F%E6%B4%BB&amp;from=feed">#我的vlog生活#</a> <a href="https://weibo.cn/pages/100808topic?extparam=%E6%9F%93%E5%A4%B4%E5%8F%91&amp;from=feed">#染头发#</a> <a href="https://m.weibo.cn/s/video/show?object_id=1034:4423354183267908&amp;fromWap=1">吃不饱的八万二饼的微博视频</a> </span>&nbsp;
+    <br>
+    <a href="https://weibo.cn/attitude/I9NJGsCF4/add?uid=2574279745&amp;rl=0&amp;st=6dca7b">赞[785]</a>&nbsp;
+    <a href="https://weibo.cn/repost/I9NJGsCF4?uid=6837288378&amp;rl=0">转发[31]</a>&nbsp;
+    <a href="https://weibo.cn/comment/I9NJGsCF4?uid=6837288378&amp;rl=0#cmtfrm" class="cc">评论[198]</a>&nbsp;
+    <a href="https://weibo.cn/fav/addFav/I9NJGsCF4?rl=0&amp;st=6dca7b">收藏</a>
+    <!---->&nbsp;
+    <span class="ct">10月03日 17:30&nbsp;来自微博 weibo.com</span>
+   </div>
+  </div>
+  <div class="s"></div>
+  <div class="c" id="M_I9Fq6bJlJ">
+   <div>
+    <span class="ctt">快康康！！哪个是八万，哪个是二师傅<img alt="[喵喵]" src="//h5.sinaimg.cn/m/emoticon/icon/others/d_miao-61fe2a7aaa.png" style="width:1em; height:1em;"></span>
+    <img alt="[喵喵]" src="//h5.sinaimg.cn/m/emoticon/icon/others/d_miao-61fe2a7aaa.png" style="width:1em; height:1em;"> 
+    <a href="https://weibo.cn/sinaurl?f=w&amp;u=http%3A%2F%2Ft.cn%2FRDnEUnO&amp;ep=I9Fq6bJlJ%2C6837288378%2CI9Fq6bJlJ%2C6837288378">天津</a> &nbsp;
+    <a href="https://place.weibo.com/h5map_body.php?xy=117.4524,38.92439&amp;backurl=https%253A%252F%252Fweibo.cn%252Fu%252F6837288378%253Ffilter%253D0%2526amp%253Bpage%253D1%2526amp%253Brand%253D4591">显示地图</a>&nbsp;[
+    <a href="https://weibo.cn/mblog/picAll/I9Fq6bJlJ?rl=1">组图共3张</a>]
+   </div>
+   <div>
+    <a href="https://weibo.cn/mblog/pic/I9Fq6bJlJ?rl=0"><img src="http://wx3.sinaimg.cn/wap180/007sIz2Oly1g7k4f1htg3j31w02iokjl.jpg" alt="图片" class="ib"></a>&nbsp;
+    <a href="https://weibo.cn/mblog/oripic?id=I9Fq6bJlJ&amp;u=007sIz2Oly1g7k4f1htg3j31w02iokjl">原图</a>&nbsp;
+    <br>
+    <a href="https://weibo.cn/attitude/I9Fq6bJlJ/add?uid=2574279745&amp;rl=0&amp;st=6dca7b">赞[820]</a>&nbsp;
+    <a href="https://weibo.cn/repost/I9Fq6bJlJ?uid=6837288378&amp;rl=0">转发[8]</a>&nbsp;
+    <a href="https://weibo.cn/comment/I9Fq6bJlJ?uid=6837288378&amp;rl=0#cmtfrm" class="cc">评论[192]</a>&nbsp;
+    <a href="https://weibo.cn/fav/addFav/I9Fq6bJlJ?rl=0&amp;st=6dca7b">收藏</a>
+    <!---->&nbsp;
+    <span class="ct">10月02日 20:19&nbsp;来自全屏双摄 OPPO A5</span>
+   </div>
+  </div>
+  <div class="s"></div>
+  <div class="c" id="M_I9ue6mgVB">
+   <div>
+    <span class="ctt">花239买工具自己在家做芝士，竟然能做成“分子料理”？！<a href="https://weibo.cn/pages/100808topic?extparam=%E6%90%9E%E7%AC%91%E8%A7%86%E9%A2%91&amp;from=feed">#搞笑视频#</a> <a href="https://weibo.cn/pages/100808topic?extparam=%E9%BB%91%E6%9A%97%E6%96%99%E7%90%86&amp;from=feed">#黑暗料理#</a> <a href="https://weibo.cn/pages/100808topic?extparam=%E8%87%AA%E5%88%B6%E8%8A%9D%E5%A3%AB&amp;from=feed">#自制芝士#</a> <a href="https://m.weibo.cn/s/video/show?object_id=1034:4422602815420371&amp;fromWap=1">吃不饱的八万二饼的微博视频</a> </span>&nbsp;
+    <br>
+    <a href="https://weibo.cn/attitude/I9ue6mgVB/add?uid=2574279745&amp;rl=0&amp;st=6dca7b">赞[574]</a>&nbsp;
+    <a href="https://weibo.cn/repost/I9ue6mgVB?uid=6837288378&amp;rl=0">转发[25]</a>&nbsp;
+    <a href="https://weibo.cn/comment/I9ue6mgVB?uid=6837288378&amp;rl=0#cmtfrm" class="cc">评论[94]</a>&nbsp;
+    <a href="https://weibo.cn/fav/addFav/I9ue6mgVB?rl=0&amp;st=6dca7b">收藏</a>
+    <!---->&nbsp;
+    <span class="ct">10月01日 15:50&nbsp;来自微博 weibo.com</span>
+   </div>
+  </div>
+  <div class="s"></div>
+  <div class="c" id="M_I9tc3gWT3">
+   <div>
+    <span class="cmt">转发了&nbsp;<a href="https://weibo.cn/cctvxinwen">央视新闻</a><img src="https://h5.sinaimg.cn/upload/2016/05/26/319/5337.gif" alt="V"><img src="https://h5.sinaimg.cn/upload/2016/05/26/319/donate_btn_s.png" alt="M">&nbsp;的微博:</span>
+    <span class="ctt">【<a href="https://weibo.cn/pages/100808topic?extparam=%E6%97%A5%E5%87%BA%E4%B8%9C%E6%96%B9%E5%A4%AE%E8%A7%86%E6%96%B0%E9%97%BB70%E5%B0%8F%E6%97%B6%E5%A4%A7%E7%9B%B4%E6%92%AD&amp;from=feed">#日出东方央视新闻70小时大直播#</a> 为祖国转发祝福！】9月29日清晨6点至10月2日凌晨4点，我们将聚焦国庆系列庆典及<a href="https://weibo.cn/pages/100808topic?extparam=%E5%9B%BD%E5%BA%86%E9%98%85%E5%85%B5&amp;from=feed">#国庆阅兵#</a>，对准每一个雷霆震撼的方阵！聚焦盛大庆典背后有条不紊的“伟大工程”！70多路记者独家揭秘！三个日出日落，无论你何时回眸，精彩都会在你眼前！<a href="https://weibo.cn/pages/100808topic?extparam=%E6%88%91%E5%92%8C%E6%88%91%E7%9A%84%E7%A5%96%E5%9B%BD&amp;from=feed">#我和我的祖国#</a>...<a href="/comment/I97uOfkpA?ckAll=1">全文</a></span>&nbsp;
+    <span class="cmt">赞[6843594]</span>&nbsp;
+    <span class="cmt">原文转发[563564]</span>&nbsp;
+    <a href="https://weibo.cn/comment/I97uOfkpA?rl=0#cmtfrm" class="cc">原文评论[375808]</a>
+    <!---->
+   </div>
+   <div>
+    <span class="cmt">转发理由:</span>祖国母亲70周年生日快乐！！！
+    <img alt="[心]" src="//h5.sinaimg.cn/m/emoticon/icon/others/l_xin-6912791858.png" style="width:1em; height:1em;">
+    <img alt="[心]" src="//h5.sinaimg.cn/m/emoticon/icon/others/l_xin-6912791858.png" style="width:1em; height:1em;">//
+    <a href="/n/%E5%A4%AE%E8%A7%86%E6%96%B0%E9%97%BB">@央视新闻</a>:【
+    <a href="https://weibo.cn/pages/100808topic?extparam=%E5%9B%BD%E5%BA%86%E9%98%85%E5%85%B5&amp;from=feed">#国庆阅兵#</a>分列式正式开始！
+    <img alt="[威武]" src="//h5.sinaimg.cn/m/emoticon/icon/others/f_v5-c583bc351a.png" style="width:1em; height:1em;">】47个地面方队、12个空中梯队从天安门前豪迈通过。看↓骄傲转发！祝福祖国！&nbsp;&nbsp;
+    <br>
+    <a href="https://weibo.cn/attitude/I9tc3gWT3/add?uid=2574279745&amp;rl=0&amp;st=6dca7b">赞[184]</a>&nbsp;
+    <a href="https://weibo.cn/repost/I9tc3gWT3?uid=6837288378&amp;rl=0">转发[1]</a>&nbsp;
+    <a href="https://weibo.cn/comment/I9tc3gWT3?uid=6837288378&amp;rl=0#cmtfrm" class="cc">评论[9]</a>&nbsp;
+    <a href="https://weibo.cn/fav/addFav/I9tc3gWT3?rl=0&amp;st=6dca7b">收藏</a>
+    <!---->&nbsp;
+    <span class="ct">10月01日 13:12&nbsp;来自全屏双摄 OPPO A5</span>
+   </div>
+  </div>
+  <div class="s"></div>
+  <div class="pa" id="pagelist">
+   <form action="/u/6837288378?filter=0" method="post">
+    <div>
+     <a href="/u/6837288378?filter=0&amp;page=2">下页</a>&nbsp;
+     <input name="mp" type="hidden" value="18">
+     <input type="text" name="page" size="2" style="-wap-input-format: &quot;*N&quot;">
+     <input type="submit" value="跳页">&nbsp;1/18页
+    </div>
+   </form>
+  </div>
+  <div class="pm">
+   <form action="/search/" method="post">
+    <div>
+     <input type="text" name="keyword" value="" size="15">
+     <input type="submit" name="smblog" value="搜微博">
+     <input type="submit" name="suser" value="找人">
+     <br>
+     <span class="pmf"><a href="/search/mblog/?keyword=%E6%97%A0%E9%94%A1%E5%B9%B8%E5%AD%98%E5%8F%B8%E6%9C%BA%E8%BF%98%E5%8E%9F%E9%80%83%E7%94%9F%E7%BB%8F%E8%BF%87&amp;rl=0" class="k">无锡幸存司机还原逃生经过</a>&nbsp;<a href="/search/mblog/?keyword=%E8%AD%A6%E6%96%B9%E9%80%9A%E6%8A%A5%E6%9D%8E%E5%BF%83%E8%8D%89%E6%BA%BA%E4%BA%A1%E4%BA%8B%E4%BB%B6&amp;rl=0" class="k">警方通报李心草溺亡事件</a>&nbsp;<a href="/search/mblog/?keyword=%E6%97%A5%E6%9C%AC%E5%8F%B0%E9%A3%8E%E5%9C%B0%E9%9C%87%E7%81%AB%E5%B1%B1%E4%B8%80%E8%B5%B7%E6%9D%A5&amp;rl=0" class="k">日本台风地震火山一起来</a>&nbsp;<a href="/search/mblog/?keyword=%E7%BA%AF%E7%94%84X%E4%B8%AD%E9%A4%90%E5%8E%85%E8%AE%B2%E4%B8%8D%E5%87%BA%E5%86%8D%E8%A7%81&amp;rl=0" class="k">纯甄X中餐厅讲不出再见</a>&nbsp;<a href="/search/mblog/?keyword=%E8%A2%AB%E5%90%B4%E4%BA%AC%E6%94%AF%E9%85%8D%E7%9A%84%E6%81%90%E6%83%A7&amp;rl=0" class="k">被吴京支配的恐惧</a></span>
+    </div>
+   </form>
+  </div>
+  <div class="cd">
+   <a href="#top"><img src="https://h5.sinaimg.cn/upload/2017/04/27/319/5e990ec2.gif" alt="TOP"></a>
+  </div>
+  <div class="pms">
+   <a href="https://weibo.cn">首页<span class="tk">!</span></a>.
+   <a href="https://weibo.cn/topic/240489">反馈</a>.
+   <a href="https://weibo.cn/page/91">帮助</a>.
+   <a href="http://down.sina.cn/weibo/default/index/soft_id/1/mid/0">客户端</a>.
+   <a href="https://weibo.cn/spam/?rl=0&amp;type=3&amp;fuid=6837288378" class="kt">举报</a>.
+   <a href="https://passport.sina.cn/sso/logout?r=https%3A%2F%2Fweibo.cn%2Fpub%2F%3Fvt%3D&amp;entry=mweibo">退出</a>
+  </div>
+  <div class="c">
+   设置:
+   <a href="https://weibo.cn/account/customize/skin?tf=7_005&amp;st=6dca7b">皮肤</a>.
+   <a href="https://weibo.cn/account/customize/pic?tf=7_006&amp;st=6dca7b">图片</a>.
+   <a href="https://weibo.cn/account/customize/pagesize?tf=7_007&amp;st=6dca7b">条数</a>.
+   <a href="https://weibo.cn/account/privacy/?tf=7_008&amp;st=6dca7b">隐私</a>
+  </div>
+  <div class="c">
+   彩版|
+   <a href="https://m.weibo.cn/?tf=7_010">触屏</a>|
+   <a href="https://weibo.cn/page/521?tf=7_011">语音</a>
+  </div>
+  <div class="b">
+   weibo.cn[10-12 19:45]
+  </div>
+ </body>
+</html>
