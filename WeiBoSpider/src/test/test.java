@@ -7,7 +7,6 @@ import spider.spider;
 import weibo.Weibo;
 
 public class test {
-
 	public static void main(String[] args) {
 		String Cookie = "";
 		String itemId = "";

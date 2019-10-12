@@ -79,6 +79,41 @@ public class download {
 		}
 
 	}
+	public static void getvideo(String src,String patch) {
+		try {
+			Date date = new Date();
+			SimpleDateFormat dateFormat = new SimpleDateFormat("HHmmss");
+			URL url = new URL(src);
+			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+			int timeout = 5000;
+			connection.setConnectTimeout(timeout);
+			InputStream inStream = connection.getInputStream();
+			byte[] data;
+			data = readInputStream(inStream);
+			FileInit(patch);
+			// new一个文件对象用来保存图片，保存在path
+			File imageFile = new File(patch + "/"+dateFormat.format(date)+(int)Math.random()*10000+".mp4");
+			// 如果文件存在就删除
+			if (imageFile.exists())
+				imageFile.delete();
+			// 创建输出流
+			FileOutputStream outStream = new FileOutputStream(imageFile);
+			// 写入数据
+			outStream.write(data);
+			// 关闭输出流
+			outStream.close();
+			System.out.println("下载完成，文件位于"+imageFile.getPath());
+		} catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 	private static void FileInit(String patch) {
 		File file = new File(patch);
 		if (file.exists()) {

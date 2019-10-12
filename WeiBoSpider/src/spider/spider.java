@@ -17,6 +17,9 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 
 import dowmload.download;
 import dowmload.downloadUserPic;
@@ -87,7 +90,7 @@ public class spider {
 					.header("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:48.0) Gecko/20100101 Firefox/48.0")
 					.header("Cookie", Cookie).ignoreContentType(true).data().timeout(10000).get();
 			Elements divs=doc.select("div[class=c]");
-			//System.out.println(doc.toString());
+			System.out.println(doc.toString());
 			for (Element element : divs) {
 				id=element.attr("id");
 				id=id.substring(id.indexOf("_")+1);
@@ -105,63 +108,44 @@ public class spider {
 
 	}
 	/**
-	 * 获取最大的评论页数，一页十条
-	 * */
-	private int getmaxPagenumber() {
-		String url = "https://weibo.cn/comment/hot/" + itemId + "?uid=" + uid + "&rl=0&gid=10001#cmtfrm";
-		Document doc = null;
-		int num = 0;
+	 *获取用户微博列表
+	 * @return 
+	 */
+	public List<Weibo> getuserAllweiboid(int i) {
+		//https://weibo.cn/u/6837288378?filter=0
+		//https://weibo.cn/u/7228303285?filter=2&page=1
+		String url="https://weibo.cn/u/"+uid+"?filter=0&page=1";
+		Document doc=null;
+		String id=null;//微博id
+		String ctt=null;//微博内容
+		List<Weibo> mList =new ArrayList();
 		try {
 			doc = Jsoup.connect(url).header("Accept", "*/*").header("Accept-Encoding", "gzip, deflate")
 					.header("Accept-Language", "zh-CN,zh;q=0.8,en-US;q=0.5,en;q=0.3")
 					.header("Content-Type", "application/json;charset=UTF-8")
 					.header("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:48.0) Gecko/20100101 Firefox/48.0")
 					.header("Cookie", Cookie).ignoreContentType(true).data().timeout(10000).get();
+			Elements divs=doc.select("div[class=c]");
+			for (Element element : divs) {
+				id=element.attr("id");
+				id=id.substring(id.indexOf("_")+1);
+				ctt=element.getElementsByClass("ctt").text().toString();
+				Weibo wb=new Weibo(id, ctt);
+				if (ctt.indexOf("的微博视频")>0) {
+					id=element.getElementsMatchingText("的微博视频").attr("href").toString();
+					wb.setIsvideo(true);
+					wb.setItemid(id);
+				}
+				mList.add(wb);
+			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		// method="post"
-		Elements txt = doc.select("form[method=post]");
-		for (Element element : txt) {
-			String text = element.text().toString();
-			if (text.endsWith("页")) {
-				text = text.substring(text.indexOf("/") + 1, text.indexOf("页", 3));
-				num = Integer.parseInt(text);
-			}
-		}
-		return num;
+		return mList;
+		
 	}
-	/**
-	 * 获取评论的文本
-	 * */
-	private void getctt(int i) {
-
-		Document doc;
-		try {
-			String url;
-			// 判断翻页
-			if (i > 1) {
-				url = "https://weibo.cn/comment/hot/" + itemId + "?uid=" + uid + "&rl=0&gid=10001&page=" + i;
-			} else {
-				url = "https://weibo.cn/comment/" + itemId + "?uid=" + uid + "&rl=0&gid=10001#cmtfrm";
-			}
-			doc = Jsoup.connect(url).header("Accept", "*/*").header("Accept-Encoding", "gzip, deflate")
-					.header("Accept-Language", "zh-CN,zh;q=0.8,en-US;q=0.5,en;q=0.3")
-					.header("Content-Type", "application/json;charset=UTF-8")
-					.header("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:48.0) Gecko/20100101 Firefox/48.0")
-					.header("Cookie", Cookie).ignoreContentType(true).data().timeout(10000).get();
-			Elements contents = doc.select("span[class=ctt]");
-			for (Element element : contents) {
-				String ctt = element.text().toString();
-				System.out.println(ctt);
-			}
-		} catch (IOException e) {
-			System.out.println("丢了个错误----------");
-			e.printStackTrace();
-		}
-
-	}
+	
 	/**
 	 * 传入的微博id获得原图链接
 	 * */
@@ -213,47 +197,6 @@ public class spider {
 			int maxmun=Integer.parseInt(numString);
 			return maxmun;
 	}
-	/**
-	 * 获取评论里的图片哒
-	 * */
-	public static void _main(String[] args) {
-		String Cookie = "";
-		String itemId = "";
-		String uid = "";
-		spider spider = new spider(Cookie, itemId, uid);
-		//int max = spider.getmaxPagenumber();
-		for (int i = 1; i < 195; i++) {
-			try {
-				System.out.println("正在获取第" + i + "页评论," + "共有" + 195 + "页");
-				spider.getuserAllPic(i);
-				System.out.println("获取中。。。。。");
-				Thread.sleep(5000);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-		}
-		System.out.println("已完成,保存在D:/weibo/data.doc");
-	}
-	/**
-	 * 获取评论里的图片哒
-	 * */
-	public static void __main(String[] args) {
-		String Cookie = "";
-		String itemId = "";
-		String uid = "";
-		spider spider = new spider(Cookie, itemId, uid);
-		for (int i = 1; i < 195; i++) {
-			try {
-				System.out.println("正在获取第" + i + "页评论," + "共有" + 195 + "页");
-				spider.getuserAllPic(i);
-				System.out.println("获取中。。。。。");
-				Thread.sleep(5000);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-		}
-		System.out.println("已完成,保存在D:/weibo/data.doc");
-	}
 	private void downlopic(String urlString,String title) {
 		if (title.length()>10) {
 			title=title.substring(0,10)+"_";
@@ -278,5 +221,23 @@ public class spider {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	public void downloadVideoByUrl(String url) throws InterruptedException {
+		ChromeOptions options = new ChromeOptions();
+		options.addArguments("headless");
+		options.addArguments("--save-page-as-mhtml");
+		WebDriver driver = new ChromeDriver(options);
+		driver.get(url);
+		Thread.sleep(5000);
+		String htmlString=driver.getPageSource();
+		Document document=Jsoup.parse(htmlString);
+		Elements videos=document.select("video[id=vjs_video_3_html5_api]");
+		String videourl="";
+		for (Element video : videos) {
+			videourl=video.attr("src");
+			videourl=videourl.replace("&amp;", "&");
+		}
+		System.out.println(videourl);
+		download.getvideo(videourl, "D:/weibo/video");
 	}
 }
