@@ -14,16 +14,20 @@ public class run {
 		String uid = "";
 		System.out.println("aaaaa----");
 		spider spider = new spider(Cookie, itemId, uid);
-		List<Weibo> list=spider.getuserAllweiboid(1);
-		for (Weibo weibo : list) {
-			if (weibo.isIsvideo()) {
-				System.out.println(weibo.getItemid()+weibo.getContent());
-				spider.downloadVideoByUrl(weibo.getItemid());
-			}else {
-				spider.getpic(weibo.getItemid(),weibo.getContent());
+		int max =spider.getPicPageMaxPage();
+		for (int i = 1; i <= max; i++) {
+			List<Weibo> list=spider.getuserAllweiboid(1);
+			for (Weibo weibo : list) {
+				if (weibo.isIsvideo()) {
+					System.out.println(weibo.getItemid()+weibo.getContent());
+					spider.downloadVideoByUrl(weibo.getItemid());
+				}else {
+					spider.getpic(weibo.getItemid(),weibo.getContent());
+				}
 			}
+			System.out.println("第"+i+"页ok,剩余"+(max-i)+"页");
+			Thread.sleep(5000);
 		}
-		
 	}
 
 }
