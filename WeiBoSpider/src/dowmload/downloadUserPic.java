@@ -89,12 +89,9 @@ public class downloadUserPic {
 		File file = new File(patch);
 		if (file.exists()) {
 			if (file.isDirectory()) {
-				System.out.println("文件夹" + file.getPath() + "存在，开始下载...");
 			} else {
-				System.out.println("存在同名文件，无法创建文件夹");
 			}
 		} else {
-			System.out.println("文件夹" + file.getPath() + "不存在,开始创建文件夹，成功后开始下载 ...");
 			file.mkdirs();
 		}
 	}
