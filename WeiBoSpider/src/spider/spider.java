@@ -114,7 +114,7 @@ public class spider {
 	public List<Weibo> getuserAllweiboid(int i) {
 		//https://weibo.cn/u/6837288378?filter=0
 		//https://weibo.cn/u/7228303285?filter=2&page=1
-		String url="https://weibo.cn/u/"+uid+"?filter=0&page=1";
+		String url="https://weibo.cn/u/"+uid+"?filter=0&page="+i;
 		Document doc=null;
 		String id=null;//微博id
 		String ctt=null;//微博内容
@@ -213,7 +213,7 @@ public class spider {
 			 connection.connect();
 			 Map<String, List<String>> map = connection.getHeaderFields();
 				// System.out.println(map.get("Location").get(0));
-			downloadUserPic.getpic(map.get("Location").get(0), "D:/weibo/"+uid+"img",title);
+			downloadUserPic.getpic(map.get("Location").get(0), "C:/weibo/"+uid+"/img",title);
 		} catch (MalformedURLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -226,6 +226,7 @@ public class spider {
 		ChromeOptions options = new ChromeOptions();
 		options.addArguments("headless");
 		options.addArguments("--save-page-as-mhtml");
+		System.setProperty("webdriver.chrome.driver","C:\\driver\\chromedriver\\chromedriver.exe");
 		WebDriver driver = new ChromeDriver(options);
 		driver.get(url);
 		Thread.sleep(5000);
@@ -238,6 +239,8 @@ public class spider {
 			videourl=videourl.replace("&amp;", "&");
 		}
 		System.out.println(videourl);
-		download.getvideo(videourl, "D:/weibo/video");
+		download.getvideo(videourl, "C:/weibo/"+uid+"/video");
+		driver.close();
+		System.out.println("driver关闭");
 	}
 }
