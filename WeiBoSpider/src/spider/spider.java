@@ -10,6 +10,7 @@ import java.nio.file.attribute.DosFileAttributes;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
 
 import javax.naming.spi.DirStateFactory.Result;
 
@@ -36,7 +37,7 @@ public class spider {
 		this.uid = uid;
 	}
 	/**
-	 * 获取微博平路里的图片
+	 * 获取微博评论里的图片
 	 * */
 	public void getPicUrl(int i) {
 		Document doc;
@@ -213,7 +214,7 @@ public class spider {
 			 connection.connect();
 			 Map<String, List<String>> map = connection.getHeaderFields();
 				// System.out.println(map.get("Location").get(0));
-			downloadUserPic.getpic(map.get("Location").get(0), "C:/weibo/"+uid+"/img",title);
+			downloadUserPic.getpic(map.get("Location").get(0), "D:/weibo/"+uid+"/img",title);
 		} catch (MalformedURLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -226,7 +227,7 @@ public class spider {
 		ChromeOptions options = new ChromeOptions();
 		options.addArguments("headless");
 		options.addArguments("--save-page-as-mhtml");
-		System.setProperty("webdriver.chrome.driver","C:\\driver\\chromedriver\\chromedriver.exe");
+		//System.setProperty("webdriver.chrome.driver","C:\\driver\\chromedriver\\chromedriver.exe");
 		WebDriver driver = new ChromeDriver(options);
 		driver.get(url);
 		Thread.sleep(5000);
@@ -239,8 +240,30 @@ public class spider {
 			videourl=videourl.replace("&amp;", "&");
 		}
 		System.out.println(videourl);
-		download.getvideo(videourl, "C:/weibo/"+uid+"/video");
+		download.getvideo(videourl, "D:/weibo/"+uid+"/video");
 		driver.close();
 		System.out.println("driver关闭");
+	}
+	public String getViedoUrl(String url) throws InterruptedException {
+		// TODO Auto-generated method stub
+		System.setProperty("webdriver.chrome.silentOutput", "true");
+		java.util.logging.Logger.getLogger("org.openqa.selenium").setLevel(Level.OFF);//屏蔽日志
+		ChromeOptions options = new ChromeOptions();
+		options.addArguments("headless");
+		options.addArguments("--save-page-as-mhtml");
+		//System.setProperty("webdriver.chrome.driver","C:\\driver\\chromedriver\\chromedriver.exe");
+		WebDriver driver = new ChromeDriver(options);
+		driver.get(url);
+		Thread.sleep(500);
+		String htmlString=driver.getPageSource();
+		Document document=Jsoup.parse(htmlString);
+		Elements videos=document.select("video[id=vjs_video_3_html5_api]");
+		String videourl="";
+		for (Element video : videos) {
+			videourl=video.attr("src");
+			videourl=videourl.replace("&amp;", "&");
+		}
+		driver.close();
+		return videourl;
 	}
 }
