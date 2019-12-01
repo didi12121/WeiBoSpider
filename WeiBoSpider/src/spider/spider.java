@@ -150,16 +150,9 @@ public class spider {
 	/**
 	 * 传入的微博id获得原图链接
 	 * */
-	public void getpic(String id,String title) throws IOException {
+	public void getpicurl(String id,String title) throws IOException {
 		String url="https://weibo.cn/mblog/picAll/"+id+"?rl=1";
 		Document doc=null;
-//		File file = new File("D:/weibo/data.txt");
-//		if (!file.exists()) {
-//			file.createNewFile();
-//		}
-		//FileWriter writer = new FileWriter(file,true);
-		//StringBuffer sb=new StringBuffer();
-		//sb.append("\n"+title+"\n");
 			doc = Jsoup.connect(url).header("Accept", "*/*").header("Accept-Encoding", "gzip, deflate")
 					.header("Accept-Language", "zh-CN,zh;q=0.8,en-US;q=0.5,en;q=0.3")
 					.header("Content-Type", "application/json;charset=UTF-8")
@@ -172,14 +165,8 @@ public class spider {
 					String urlString="https://weibo.cn"+hrefString;
 							System.out.println(urlString);
 							downlopic(urlString, title);
-					//sb.append("https://weibo.cn"+hrefString+"\n");
 				}
 			}
-			//System.out.println(sb.toString());
-//			writer.append(sb);
-//			writer.flush();
-//			writer.close();
-		
 	}
 	public int getPicPageMaxPage() {
 		String url="https://weibo.cn/u/"+uid+"?filter=2&page=1";
@@ -213,13 +200,10 @@ public class spider {
 			 connection.setRequestProperty("Cookie", Cookie);
 			 connection.connect();
 			 Map<String, List<String>> map = connection.getHeaderFields();
-				// System.out.println(map.get("Location").get(0));
 			downloadUserPic.getpic(map.get("Location").get(0), "D:/weibo/"+uid+"/img",title);
 		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -227,7 +211,6 @@ public class spider {
 		ChromeOptions options = new ChromeOptions();
 		options.addArguments("headless");
 		options.addArguments("--save-page-as-mhtml");
-		//System.setProperty("webdriver.chrome.driver","C:\\driver\\chromedriver\\chromedriver.exe");
 		WebDriver driver = new ChromeDriver(options);
 		driver.get(url);
 		Thread.sleep(5000);
@@ -244,14 +227,15 @@ public class spider {
 		driver.close();
 		System.out.println("driver关闭");
 	}
+	/**
+	 * 返回视频的连接
+	 * */
 	public String getViedoUrl(String url) throws InterruptedException {
-		// TODO Auto-generated method stub
 		System.setProperty("webdriver.chrome.silentOutput", "true");
 		java.util.logging.Logger.getLogger("org.openqa.selenium").setLevel(Level.OFF);//屏蔽日志
 		ChromeOptions options = new ChromeOptions();
 		options.addArguments("headless");
 		options.addArguments("--save-page-as-mhtml");
-		//System.setProperty("webdriver.chrome.driver","C:\\driver\\chromedriver\\chromedriver.exe");
 		WebDriver driver = new ChromeDriver(options);
 		driver.get(url);
 		Thread.sleep(500);

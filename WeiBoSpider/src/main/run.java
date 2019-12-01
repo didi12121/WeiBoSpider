@@ -11,11 +11,11 @@ import weibo.Weibo;
 public class run {
 
 	public static void main(String[] args) throws InterruptedException, IOException {
-		boolean useThunder=true;//是否使用迅雷下载
+		boolean useThunder=false;//是否使用迅雷下载
 		String Cookie = "";
 		String itemId = "";
 		String uid = "";
-		System.out.println("aaaaa----");
+		System.out.println("开始下载--");
 		spider spider = new spider(Cookie, itemId, uid);
 		int max =spider.getPicPageMaxPage();
 		Thread.sleep(1000);
@@ -33,20 +33,16 @@ public class run {
 				}else {
 					Thread.sleep(1000);
 					try {
-						spider.getpic(weibo.getItemid(),weibo.getContent());
+						spider.getpicurl(weibo.getItemid(),weibo.getContent());
 					} catch (NullPointerException e) {
 						e.printStackTrace();
 						continue;
 					} catch(SocketTimeoutException e){
 						e.printStackTrace();
 						continue;
-					} catch(OutOfMemoryError e){
-						System.out.println("内存溢出");
-						continue;
-					}finally {
 					}
 				}
-				Thread.sleep(5000);
+				Thread.sleep(4000);
 				weibo=null;
 			}	
 			System.out.println("第"+i+"页ok,剩余"+(max-i)+"页");

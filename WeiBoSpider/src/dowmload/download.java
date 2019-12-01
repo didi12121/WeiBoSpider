@@ -22,7 +22,6 @@ public class download {
 		// 每次读取的字符串长度，如果为-1，代表全部读取完毕
 		int len = 0;
 		// 使用一个输入流从buffer里把数据读取出来
-
 		try {
 			while ((len = inStream.read(buffer)) != -1) {
 				// 用输出流往buffer里写入数据，中间参数代表从哪个位置开始读，len代表读取的长度
@@ -33,14 +32,12 @@ public class download {
 			System.out.println("OutOfMemoryError,文件过大,无法下载(可能是大于一小时的视频)----------");
 			return null;
 		}
-
 		outStream.flush();
 		// 关闭输入流
 		inStream.close();
 		// 把outStream里的数据写入内存
 		return outStream.toByteArray();
 	}
-
 	public static void getpic(String src, String patch) {
 		// TODO Auto-generated method stub
 		try {
@@ -111,12 +108,6 @@ public class download {
 					if (!file.exists()) {
 						file.createNewFile();
 					}
-					FileWriter writer = new FileWriter(file,true);
-					writer.append("aaaa’”");
-					//writer.append(src+"\n");
-					writer.flush();
-					writer.close();
-					System.out.println(src+"\n-------跳过下载,已保存在"+file.getPath());
 					return;
 					}
 			FileInit(patch);
