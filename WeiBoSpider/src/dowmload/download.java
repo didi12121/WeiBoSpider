@@ -145,7 +145,7 @@ public class download {
 		}
 	}
 
-	public static void smain(String[] args) {
+	public static void main(String[] args) {
 		// http://f.video.weibocdn.com/003lnNR7lx07xJK9ML7O0104120bkIXX0E040.mp4?label=mp4_hd&template=640x360.25.0&trans_finger=62b30a3f061b162e421008955c73f536&Expires=1571039959&ssig=lM%2BSTDSQZQ&KID=unistore,video
 		download.getvideo(
 				"http://f.video.weibocdn.com/003lnNR7lx07xJK9ML7O0104120bkIXX0E040.mp4?label=mp4_hd&template=640x360.25.0&trans_finger=62b30a3f061b162e421008955c73f536&Expires=1571039959&ssig=lM%2BSTDSQZQ&KID=unistore,video",
