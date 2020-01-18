@@ -13,7 +13,7 @@ import java.util.Date;
 
 import javax.net.ssl.HttpsURLConnection;
 
-public class downloadUserPic {
+public class downloadUserPic implements Runnable {
 	public static byte[] readInputStream(InputStream inStream) throws Exception {
 		ByteArrayOutputStream outStream = new ByteArrayOutputStream();
 		// 创建一个Buffer字符串
@@ -94,5 +94,18 @@ public class downloadUserPic {
 		} else {
 			file.mkdirs();
 		}
+	}
+	private String src;
+	private String patch;
+	private String title;
+	
+	public downloadUserPic(String src,String patch,String title) {
+		this.src=src;
+		this.patch=patch;
+		this.title=title;
+	}
+	@Override
+	public void run() {
+		getpic(src,patch,title);
 	}
 }

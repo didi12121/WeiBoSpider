@@ -140,7 +140,6 @@ public class spider {
 				mList.add(wb);
 			}
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return mList;
@@ -163,7 +162,7 @@ public class spider {
 				String hrefString=element.attr("href").toString();
 				if (hrefString.startsWith("/mblog/oripic?")) {
 					String urlString="https://weibo.cn"+hrefString;
-							System.out.println(urlString);
+//							System.out.println(urlString);
 							downlopic(urlString, title);
 				}
 			}
@@ -188,6 +187,7 @@ public class spider {
 	private void downlopic(String urlString,String title) {
 		if (title.length()>10) {
 			title=title.substring(0,10)+"_";
+			title=title.replace("*", "_");
 		}
 		try {
 			URL url=new URL(urlString);
@@ -200,7 +200,8 @@ public class spider {
 			 connection.setRequestProperty("Cookie", Cookie);
 			 connection.connect();
 			 Map<String, List<String>> map = connection.getHeaderFields();
-			downloadUserPic.getpic(map.get("Location").get(0), "D:/weibo/"+uid+"/img",title);
+//			 System.out.println(map.get("Location").get(0).toString());
+			 new Thread(new downloadUserPic(map.get("Location").get(0), "D:/weibo/"+uid+"/img",title)).start();
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
