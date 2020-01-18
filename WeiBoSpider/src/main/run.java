@@ -12,9 +12,9 @@ public class run {
 
 	public static void main(String[] args) throws InterruptedException, IOException {
 		boolean useThunder=false;//是否使用迅雷下载
-		String Cookie = " _T_WM=65feccd20587655db526c10977789b47; SUB=_2A25w5vlBDeRhGedG6lAT9ibEzj6IHXVQKIcJrDV6PUJbkdANLUP5kW1NUWcmyDyL2KPAm9rT9Y2xlQGS8SMYrihq; SUHB=0P1NJFjxGS9TAc; SCF=Asibdzh4nvOqJ88iAMMg-P6ItWz1yW0nXvzuFcfvvZqhoOmeuNVAs5WTkXqnGHzTBtWOtYXFXU5VrSqTJWhU16s.";
+		String Cookie = "";
 		String itemId = "";
-		String uid = "1927305954";
+		String uid = "";
 		System.out.println("开始下载--");
 		spider spider = new spider(Cookie, itemId, uid);
 		int max =spider.getPicPageMaxPage();
